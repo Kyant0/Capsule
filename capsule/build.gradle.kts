@@ -51,4 +51,3 @@ android {
     namespace = "com.kyant.capsule"
     compileSdk = 36
 }
-
