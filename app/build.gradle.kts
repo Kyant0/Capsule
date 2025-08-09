@@ -1,9 +1,35 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.compose)
+    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.compose)
+}
+
+kotlin {
+    androidTarget()
+
+    js(IR) {
+        browser {
+            outputModuleName = "demo"
+            commonWebpackConfig {
+                outputFileName = "demo.js"
+            }
+        }
+        binaries.executable()
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":capsule"))
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.ui)
+        }
+
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
+    }
 }
 
 android {
@@ -32,12 +58,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
     kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
-            freeCompilerArgs.addAll(
-                "-jvm-default=no-compatibility",
-            )
-        }
+        jvmToolchain(21)
     }
     buildFeatures {
         compose = true
@@ -69,13 +90,4 @@ android {
     lint {
         checkReleaseBuilds = false
     }
-}
-
-dependencies {
-    implementation(project(":capsule"))
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.foundation)
-    implementation(libs.androidx.runtime)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
 }

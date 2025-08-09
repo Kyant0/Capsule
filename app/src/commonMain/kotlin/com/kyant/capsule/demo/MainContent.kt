@@ -134,25 +134,25 @@ fun MainContent() {
                 radiusDp,
                 0f..maxRadius.value,
                 "Corner radius",
-                { "${"%.0f".format(it)}dp" },
+                { it.toInt().toString() + "dp" },
             )
             Slider(
                 circleFraction,
                 0f..1f,
                 "Circle fraction",
-                { "%.1f".format(it * 100f) + "%" },
+                { (it * 100f).let { v -> ((v * 10).toInt() / 10.0).toString() } + "%" },
             )
             Slider(
                 extendedFraction,
                 0f..2f,
                 "Extended fraction",
-                { "%.1f".format(it * 100f) + "%" },
+                { (it * 100f).let { v -> ((v * 10).toInt() / 10.0).toString() } + "%" },
             )
             Slider(
                 aspectRatio,
                 1f..2f,
                 "Aspect ratio",
-                { "%.3f".format(it) },
+                { ((it * 1000).toInt() / 1000.0).toString() },
             )
         }
 

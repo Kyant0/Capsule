@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="capsule-wasm-js">
+    <output-path>$PROJECT_DIR$/capsule/build/libs</output-path>
+    <root id="archive" name="capsule-wasm-js.jar">
+      <element id="module-output" name="Capsule.capsule.wasmJsMain" />
+    </root>
+  </artifact>
+</component>
