@@ -1,8 +1,31 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.compose.multiplatform)
     id("com.vanniktech.maven.publish")
+}
+
+kotlin {
+    jvmToolchain(21)
+    androidTarget()
+    jvm()
+    iosArm64()
+    iosSimulatorArm64()
+    iosX64()
+    wasmJs {
+        browser()
+    }
+    js {
+        browser()
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(compose.foundation)
+            implementation(compose.ui)
+        }
+    }
 }
 
 android {
@@ -22,9 +45,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    kotlin {
-        jvmToolchain(21)
-    }
+
     buildFeatures {
         compose = true
     }
