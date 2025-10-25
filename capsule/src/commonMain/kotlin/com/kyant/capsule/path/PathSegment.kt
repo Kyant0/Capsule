@@ -1,11 +1,12 @@
 package com.kyant.capsule.path
 
-import android.graphics.RectF
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.asAndroidPath
+import androidx.compose.ui.graphics.Path.Direction
 import com.kyant.capsule.core.Point
-import java.lang.Math.PI
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -47,15 +48,16 @@ sealed interface PathSegment {
             )
 
         override fun drawTo(path: Path) {
-            path.asAndroidPath().arcTo(
-                RectF(
+            path.arcTo(
+                Rect(
                     (center.x - radius).toFloat(),
                     (center.y - radius).toFloat(),
                     (center.x + radius).toFloat(),
                     (center.y + radius).toFloat()
                 ),
                 (startAngle * (180.0 / PI)).toFloat(),
-                (sweepAngle * (180.0 / PI)).toFloat()
+                (sweepAngle * (180.0 / PI)).toFloat(),
+                forceMoveTo = false,
             )
         }
     }
@@ -72,11 +74,12 @@ sealed interface PathSegment {
             get() = from
 
         override fun drawTo(path: Path) {
-            path.asAndroidPath().addCircle(
-                center.x.toFloat(),
-                center.y.toFloat(),
-                radius.toFloat(),
-                android.graphics.Path.Direction.CW
+            path.addOval(
+                oval = Rect(
+                    center = Offset(center.x.toFloat(), center.y.toFloat()),
+                    radius = radius.toFloat()
+                ),
+                direction = Direction.Clockwise
             )
         }
     }
