@@ -8,7 +8,10 @@ plugins {
 
 kotlin {
     jvmToolchain(21)
-    androidTarget()
+    androidTarget {
+        withSourcesJar(true)
+        publishLibraryVariants("release")
+    }
     jvm()
     iosArm64()
     iosSimulatorArm64()
@@ -42,7 +45,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 

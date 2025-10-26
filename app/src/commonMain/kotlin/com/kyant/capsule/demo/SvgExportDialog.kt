@@ -1,9 +1,5 @@
 package com.kyant.capsule.demo
 
-import android.app.Activity
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +30,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.withTransform
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -43,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastCoerceIn
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.FileProvider
 import com.kyant.capsule.Continuity
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
@@ -52,7 +46,6 @@ import com.kyant.capsule.path.toPath
 import com.kyant.capsule.path.toSvg
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
@@ -61,7 +54,7 @@ fun SvgExportDialog(
     onDismissRequest: () -> Unit,
     continuity: () -> Continuity
 ) {
-    Dialog(onDismissRequest) {
+    Dialog(onDismissRequest = onDismissRequest) {
         val color = Color(0xFF0088FF)
         val contentColor = { Color.White }
 
@@ -209,41 +202,42 @@ fun SvgExportDialog(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val context = LocalContext.current
-                val createFileLauncher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.StartActivityForResult()
-                ) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        val uri = result.data?.data
-                        if (uri != null) {
-                            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                                val svg = currentPathSegments.toSvg(asDocument = true)
-                                outputStream.write(svg.toByteArray())
-                            }
-                        }
-                    }
-                }
+//                val context = LocalContext.current
+//                val createFileLauncher = rememberLauncherForActivityResult(
+//                    contract = ActivityResultContracts.StartActivityForResult()
+//                ) { result ->
+//                    if (result.resultCode == Activity.RESULT_OK) {
+//                        val uri = result.data?.data
+//                        if (uri != null) {
+//                            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+//                                val svg = currentPathSegments.toSvg(asDocument = true)
+//                                outputStream.write(svg.toByteArray())
+//                            }
+//                        }
+//                    }
+//                }
 
                 Box(
                     Modifier
                         .clip(ContinuousCapsule)
                         .background(color)
                         .clickable {
-                            val svg = currentPathSegments.toSvg(asDocument = true)
-                            val tempFile = File(context.cacheDir, "continuous_rounded_rect.svg").apply {
-                                writeBytes(svg.toByteArray())
-                            }
-                            val uri = FileProvider.getUriForFile(
-                                context,
-                                "${context.packageName}.provider",
-                                tempFile
-                            )
-                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                type = "image/svg+xml"
-                                putExtra(Intent.EXTRA_STREAM, uri)
-                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share SVG"))
+//                            val svg = currentPathSegments.toSvg(asDocument = true)
+//                            val tempFile =
+//                                File(context.cacheDir, "continuous_rounded_rect.svg").apply {
+//                                    writeBytes(svg.toByteArray())
+//                                }
+//                            val uri = FileProvider.getUriForFile(
+//                                context,
+//                                "${context.packageName}.provider",
+//                                tempFile
+//                            )
+//                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+//                                type = "image/svg+xml"
+//                                putExtra(Intent.EXTRA_STREAM, uri)
+//                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                            }
+//                            context.startActivity(Intent.createChooser(shareIntent, "Share SVG"))
                         }
                         .height(48.dp)
                         .weight(1f)
@@ -261,12 +255,12 @@ fun SvgExportDialog(
                         .clip(ContinuousCapsule)
                         .background(color)
                         .clickable {
-                            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                                addCategory(Intent.CATEGORY_OPENABLE)
-                                type = "image/svg+xml"
-                                putExtra(Intent.EXTRA_TITLE, "continuous_rounded_rect.svg")
-                            }
-                            createFileLauncher.launch(intent)
+//                            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+//                                addCategory(Intent.CATEGORY_OPENABLE)
+//                                type = "image/svg+xml"
+//                                putExtra(Intent.EXTRA_TITLE, "continuous_rounded_rect.svg")
+//                            }
+//                            createFileLauncher.launch(intent)
                         }
                         .height(48.dp)
                         .weight(1f)

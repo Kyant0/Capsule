@@ -46,6 +46,8 @@ import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.continuities.G2Continuity
 import com.kyant.capsule.continuities.G2ContinuityProfile
 import com.kyant.capsule.path.toPath
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 @Composable
 fun MainContent() {
@@ -295,13 +297,13 @@ fun MainContent() {
                     radiusDp,
                     0f..maxRadius.value,
                     "Corner radius",
-                    { "${"%.0f".format(it)}dp" },
+                    { "${it.roundToInt()}dp" },
                 )
                 Slider(
                     aspectRatio,
                     1f..3f,
                     "Aspect ratio",
-                    { "%.3f".format(it) },
+                    { it.toFixed(3) },
                 )
 
                 FlowRow(
@@ -354,25 +356,25 @@ fun MainContent() {
                     extendedFraction,
                     0f..1f,
                     "Extended fraction",
-                    { "%.3f".format(it * 100f) + "%" }
+                    { (it * 100f).toFixed(3) + "%" }
                 )
                 Slider(
                     arcFraction,
                     0f..0.8f,
                     "Arc fraction",
-                    { "%.3f".format(it * 100f) + "%" }
+                    { (it * 100f).toFixed(3) + "%" }
                 )
                 Slider(
                     bezierCurvatureScale,
                     0.5f..2f,
                     "Bezier curvature scale",
-                    { "%.3f".format(it * 100f) + "%" }
+                    { (it * 100f).toFixed(3) + "%" }
                 )
                 Slider(
                     arcCurvatureScale,
                     0.85f..1.5f,
                     "Arc curvature scale",
-                    { "%.3f".format(it * 100f) + "%" }
+                    { (it * 100f).toFixed(3) + "%" }
                 )
             }
 
@@ -385,15 +387,19 @@ fun MainContent() {
                     capsuleExtendedFraction,
                     0f..1f,
                     "Extended fraction",
-                    { "%.3f".format(it * 100f) + "%" }
+                    { (it * 100f).toFixed(3) + "%" }
                 )
                 Slider(
                     capsuleArcFraction,
                     0f..1f,
                     "Arc fraction",
-                    { "%.3f".format(it * 100f) + "%" }
+                    { (it * 100f).toFixed(3) + "%" }
                 )
             }
         }
     }
 }
+
+private fun Float.toFixed(digits: Int): String =
+    ((this * 10f.pow(digits)).roundToInt() / 10f.pow(digits)).toString()
+    
