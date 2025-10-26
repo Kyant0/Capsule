@@ -1,3 +1,6 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -9,14 +12,27 @@ kotlin {
     jvmToolchain(21)
     androidTarget()
     jvm()
-    iosArm64()
-    iosSimulatorArm64()
-    iosX64()
-    wasmJs {
-        browser()
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
     }
+
     js {
         browser()
+        binaries.executable()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
     sourceSets {
@@ -49,7 +65,10 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             vcsInfo.include = false
         }
     }
@@ -93,4 +112,16 @@ dependencies {
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+}
+
+compose.desktop {
+    application {
+        mainClass = "com.kyant.capsule.demo.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.kyant.capsule"
+            packageVersion = "1.0.0"
+        }
+    }
 }
