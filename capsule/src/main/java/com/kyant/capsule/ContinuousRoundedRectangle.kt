@@ -10,6 +10,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.LayoutDirection.Ltr
@@ -115,6 +116,17 @@ open class ContinuousRoundedRectangle(
     override fun toString(): String {
         return "ContinuousRoundedRectangle(topStart=$topStart, topEnd=$topEnd, bottomEnd=$bottomEnd, " +
                 "bottomStart=$bottomStart, continuity=$continuity)"
+    }
+
+    override fun lerp(other: Any?, t: Float): Any? {
+        var other = other
+        if (other == RectangleShape || other == null) {
+            other = ContinuousRectangle(continuity)
+        }
+        if (other is ContinuousRoundedRectangle) {
+            return lerp(this, other, t)
+        }
+        return null
     }
 }
 
